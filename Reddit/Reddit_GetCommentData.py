@@ -5,16 +5,21 @@ import plac
 
 def main():
     subreddit = 'r/wallstreetbets'
-    name = getPopularPost(subreddit)
+    name = getPopularPost(subreddit,1)
     print(name)
-    comments = getComments(name,subreddit)
-    # for c in comments:
-    #     print(str(comments.index(c)) + ' ' + c)
+    comments = getComments(name,subreddit,limitnum)
+     for c in comments:
+         print(str(comments.index(c)) + ' ' + c)
 
+############# This method returns the fullname/s for a sub reddit post. 
+############# Multiple name can be retrieved based on limit num input.
 
-def getPopularPost(subreddit):
+def getPopularPostFullName(subreddit, limitnum):
+
+    if subreddit is not None raise ValueError("Sub Reddit Argument needs to have a value for call to work.")
+
     my_headers = {'User-agent' : 'MyUserAgent'}
-    my_filtercriteria = {'limit':'1'}
+    my_filtercriteria = {'limit':limitnum}
 
     try:
         r = requests.get('http://www.reddit.com/'+ subreddit +'/hot/.json',headers= my_headers,params=my_filtercriteria)
@@ -27,9 +32,15 @@ def getPopularPost(subreddit):
     except Exception as e:
         print('Unable to get latest reddit post due to:\n' + str(e))
 
-def getComments(fullname, subreddit):
+############# This method returns the comments from a subreddit post.
+############# This method requires that a full name be included in the method.
+
+def getComments(fullname, subreddit,limitnum):
     my_headers = {'User-agent' : 'MyUserAgent'}
-    my_filtercriteria = {'article':fullname, 'limit': '10'}
+    my_filtercriteria = {'article':fullname, 'limit': limitnum}
+
+     if subreddit is not None raise ValueError("Sub Reddit Argument needs to have a value for call to work.")
+
     try:
         r = requests.get('http://www.reddit.com/'+ subreddit +'/comments/.json',headers= my_headers,params=my_filtercriteria)
         r.raise_for_status()
