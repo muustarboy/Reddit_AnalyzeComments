@@ -4,10 +4,10 @@ import plac
 
 
 def main(): 
-    fullname = getPostFullName(subreddit="r/wallstreetbets",category="hot",limitnum=1)
-    comments = getComments(fullname,subreddit="r/wallstreetbets",limitnum)
+    fullname = getPostFullName(subreddit=="r/wallstreetbets",category="hot",limitnum=1)
+    comments = getComments(fullname,subreddit="r/wallstreetbets",limitnum=20)
     for c in comments:
-        print(str(comments.index(c)) + ' | ' + c)
+        print(str(comments.index(c) + 1) + ' | ' + c)
 
 
 
@@ -17,8 +17,9 @@ def main():
 
 def getPostFullName(subreddit, category, limitnum):
 
-    if subreddit is None:
+    if subreddit or category is None:
         raise ValueError("Sub Reddit Argument is null and needs to have a value for call to work.")
+
 
     my_headers = {'User-agent' : 'MyUserAgent'}
     my_filtercriteria = {'limit':limitnum}
@@ -41,7 +42,7 @@ def getPostFullName(subreddit, category, limitnum):
 
 
 
-#  This method returns the comments from a subreddit post.
+#  This method returns comments as a list from a subreddit post.
 #  It requires that a full name be included in the method,
 #  optionally you can specify a limit of items returned.
 
@@ -49,7 +50,7 @@ def getComments(fullname, subreddit, limitnum):
     my_headers = {'User-agent' : 'MyUserAgent'}
     my_filtercriteria = {'article':fullname, 'limit': limitnum}
 
-    if subreddit is None:
+    if fullname or subreddit is None:
         raise ValueError("FullName/SubReddit Argument is null and needs to have a value for call to work.")
 
     baseURI  = "http://www.reddit.com/"
