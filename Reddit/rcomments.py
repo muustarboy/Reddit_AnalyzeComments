@@ -4,8 +4,8 @@ import plac
 
 
 def main(): 
-    fullname = getPostFullName(subreddit=="r/wallstreetbets",category="hot",limitnum=1)
-    comments = getComments(fullname,subreddit="r/wallstreetbets",limitnum=20)
+    fname = getPostFullName(subreddit="r/wallstreetbets",category="hot",limitnum=1)
+    comments = getComments(fullname=fname,subreddit="r/wallstreetbets",limitnum=100)
     for c in comments:
         print(str(comments.index(c) + 1) + ' | ' + c)
 
@@ -17,21 +17,17 @@ def main():
 
 def getPostFullName(subreddit, category, limitnum):
 
-    if subreddit or category is None:
-        raise ValueError("Sub Reddit Argument is null and needs to have a value for call to work.")
-
+    if limitnum is None:
+        limitnum=1
 
     my_headers = {'User-agent' : 'MyUserAgent'}
     my_filtercriteria = {'limit':limitnum}
 
-    baseURI  = "http://www.reddit.com/"
-    endpoint = subreddit +'/'+ category +'/.json'
-    url = baseURI + endpoint
+    url = f"http://www.reddit.com/{subreddit}/{category}/.json"
 
     try:
         r = requests.get(url,headers= my_headers,params=my_filtercriteria)
         r.raise_for_status()
-        
         data = r.json()
 
         return(data['data']['children'][0]['data']['name'])
@@ -40,22 +36,19 @@ def getPostFullName(subreddit, category, limitnum):
         print('Unable to get latest reddit post due to:\n' + str(e))
 
 
-
-
 #  This method returns comments as a list from a subreddit post.
 #  It requires that a full name be included in the method,
 #  optionally you can specify a limit of items returned.
 
 def getComments(fullname, subreddit, limitnum):
+    
+    if limitnum is None:
+        limitnum=1
+
     my_headers = {'User-agent' : 'MyUserAgent'}
     my_filtercriteria = {'article':fullname, 'limit': limitnum}
 
-    if fullname or subreddit is None:
-        raise ValueError("FullName/SubReddit Argument is null and needs to have a value for call to work.")
-
-    baseURI  = "http://www.reddit.com/"
-    endpoint = subreddit +"/comments/.json"
-    url = baseURI + endpoint
+    url = f"http://www.reddit.com/{subreddit}/comments/.json"
 
     try:
         r = requests.get(url,headers= my_headers,params=my_filtercriteria)
