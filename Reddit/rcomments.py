@@ -15,7 +15,7 @@ def main():
 # Category determines which grouping of posts to return, optionally
 # you can specify a limit of items returned.
 
-def getPostFullName(subreddit, category, limitnum):
+def getPostFullName(subreddit: str, category: str, limitnum: int):
 
     if limitnum is None:
         limitnum=1
@@ -40,7 +40,7 @@ def getPostFullName(subreddit, category, limitnum):
 #  It requires that a full name be included in the method,
 #  optionally you can specify a limit of items returned.
 
-def getComments(fullname, subreddit, limitnum):
+def getComments(fullname: str, subreddit: str, limitnum: int):
     
     if limitnum is None:
         limitnum=1
