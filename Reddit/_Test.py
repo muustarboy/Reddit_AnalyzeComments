@@ -1,3 +1,4 @@
-import rcomments
+import categories
 
 
+print(categories.Category.Hot.name)
